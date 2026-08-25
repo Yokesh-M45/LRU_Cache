@@ -5,57 +5,68 @@ import java.util.HashMap;
 public class LRUCache {
 
     private int capacity;
+
     private HashMap<Integer, CacheNode> map;
 
     private CacheNode head;
     private CacheNode tail;
 
     public LRUCache(int capacity) {
+
         this.capacity = capacity;
+
         map = new HashMap<>();
 
-        head = new CacheNode(0, 0);
-        tail = new CacheNode(0, 0);
+        head = new CacheNode(0, "");
+        tail = new CacheNode(0, "");
 
         head.next = tail;
         tail.prev = head;
     }
 
     // Put Key-Value
-    public void put(int key, int value) {
+    public void put(int key, String value) {
 
+        // If key already exists
         if (map.containsKey(key)) {
+
             CacheNode node = map.get(key);
 
             node.value = value;
 
             removeNode(node);
             addToFront(node);
+
         } else {
 
             CacheNode node = new CacheNode(key, value);
 
             map.put(key, node);
+
             addToFront(node);
 
+            // Remove least recently used item
             if (map.size() > capacity) {
-                CacheNode last = tail.prev;
 
-                removeNode(last);
-                map.remove(last.key);
+                CacheNode lruNode = tail.prev;
+
+                removeNode(lruNode);
+
+                map.remove(lruNode.key);
             }
         }
     }
 
     // Get Value
-    public int get(int key) {
+    public String get(int key) {
 
         if (!map.containsKey(key)) {
-            return -1;
+            return null;
         }
 
         CacheNode node = map.get(key);
 
+        // Make it recently used
         removeNode(node);
         addToFront(node);
 
@@ -70,6 +81,7 @@ public class LRUCache {
             CacheNode node = map.get(key);
 
             removeNode(node);
+
             map.remove(key);
         }
     }
@@ -78,15 +90,16 @@ public class LRUCache {
     public void display() {
 
         if (map.isEmpty()) {
-            System.out.println("Cache is empty");
+            System.out.println("Cache is empty.");
             return;
         }
 
         CacheNode current = head.next;
 
-        System.out.println("Cache:");
+        System.out.println("\nCache (LRU -> MRU):");
 
         while (current != tail) {
+
             System.out.println(
                     "Key: " + current.key +
                             " | Value: " + current.value
@@ -96,11 +109,12 @@ public class LRUCache {
         }
     }
 
-    // Cache Size
+    // Check Cache Size
     public int size() {
         return map.size();
     }
 
+    // Add node at front
     private void addToFront(CacheNode node) {
 
         node.next = head.next;
@@ -110,6 +124,7 @@ public class LRUCache {
         head.next = node;
     }
 
+    // Remove node
     private void removeNode(CacheNode node) {
 
         node.prev.next = node.next;

@@ -23,59 +23,73 @@ public class Main {
             System.out.println("5. Check Cache Size");
             System.out.println("6. Exit");
 
-            System.out.print("Enter Choice: ");
+            System.out.print("Enter your choice: ");
             int choice = sc.nextInt();
 
             switch (choice) {
 
                 case 1:
+
                     System.out.print("Enter Key: ");
                     int key = sc.nextInt();
 
                     System.out.print("Enter Value: ");
-                    int value = sc.nextInt();
+                    String value = sc.next();
 
                     cache.put(key, value);
 
                     System.out.println("Key-Value added successfully.");
+
                     break;
 
                 case 2:
+
                     System.out.print("Enter Key: ");
                     key = sc.nextInt();
 
-                    int result = cache.get(key);
+                    String result = cache.get(key);
 
-                    if (result == -1) {
+                    if (result == null) {
                         System.out.println("Key not found.");
                     } else {
                         System.out.println("Value: " + result);
                     }
+
                     break;
 
                 case 3:
+
                     System.out.print("Enter Key: ");
                     key = sc.nextInt();
 
                     cache.remove(key);
 
                     System.out.println("Key removed successfully.");
+
                     break;
 
                 case 4:
+
                     cache.display();
+
                     break;
 
                 case 5:
-                    System.out.println("Cache Size: " + cache.size());
+
+                    System.out.println(
+                            "Cache Size: " + cache.size()
+                    );
+
                     break;
 
                 case 6:
-                    System.out.println("Exiting...");
+
+                    System.out.println("Thank you!");
                     sc.close();
                     return;
 
                 default:
+
                     System.out.println("Invalid choice.");
             }
         }
